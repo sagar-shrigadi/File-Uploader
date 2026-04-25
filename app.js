@@ -9,6 +9,7 @@ import { verifyCb } from "./passport/verifycallback.js";
 import { serializeCb } from "./passport/serializeCallback.js";
 import { deserializeCb } from "./passport/deserializeCallback.js";
 import { indexRouter } from "./route/index.js";
+import { folderRouter } from "./route/folder.js";
 
 const app = express();
 
@@ -54,6 +55,7 @@ app.use(async (req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/folders", folderRouter);
 app.use("/", indexRouter);
 
 const PORT = process.env.PORT || 3000;

@@ -1,0 +1,18 @@
+<%- include('../partials/header.ejs') %>
+<main>
+    <section>
+        <h1>Welcome, <%= currentUser.username %></h1>
+        <a href="/folders">View All Folders</a><br>
+        <a href="/folders/new">+ Create</a>
+        <% if (locals.selectedFolder) { %>
+            <article>
+                <h2><%= selectedFolder.name %></h2>
+                <a href="/folders/edit/<%= selectedFolder.id %>">Edit</a><br>
+                <form action="/folders/delete/<%= selectedFolder.id %>" method="post">
+                    <button type="submit" onclick="confirm(`Are you sure you want to delete folder <%= selectedFolder.name %>`)">Delete</button>
+                </form>
+            </article>
+        <% } %>
+    </section>
+</main>
+<%- include('../partials/footer.ejs') %>

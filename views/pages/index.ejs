@@ -1,7 +1,31 @@
-<h1>Index</h1>
-<% if (!locals.currentUser) { %>
-    <a href="/sign-up">Sign Up</a><br>
-    <a href="/login">Log In</a>
-<% } else { %>
-    <a href="/logout">Logout</a>
-<% } %>
+<%- include('../partials/header.ejs') %>
+<main>
+    <% if (!locals.currentUser) { %>
+        <section>
+            <h1>Index</h1>
+        </section>
+    <% } else { %>
+        <section>
+            <article>
+                <h1>Welcome, <%= currentUser.username %></h1>
+                <a href="/folders/new">+ Create</a>
+            </article>
+            <% if (locals.allFolders) { %>
+                <section>
+                    <% allFolders.forEach(folder => { %>
+                        <article>
+                            <a href="/folders/<%= folder.id %>">
+                                <p><%= folder.name %></p>
+                            </a>
+                            <a href="/folders/edit/<%= folder.id %>">Edit</a>
+                            <form action="/folders/delete/<%= folder.id %>" method="post">
+                                <button type="submit" onclick="confirm(`Are you sure you want to delete folder <%= folder.name %>`)">Delete</button>
+                            </form>
+                        </article>
+                    <% }) %>
+                </section>
+            <% } %>
+        </section>
+    <% } %>
+</main>
+<%- include('../partials/footer.ejs') %>

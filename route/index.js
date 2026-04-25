@@ -13,7 +13,7 @@ indexRouter.post(
   // login validation
   postLogin,
   passport.authenticate("local", {
-    successRedirect: "/",
+    successRedirect: "/folders",
     failureRedirect: "/login",
   }),
 );
