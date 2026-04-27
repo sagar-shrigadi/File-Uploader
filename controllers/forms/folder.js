@@ -4,12 +4,13 @@ import {
   deleteFolderById,
   getFolderById,
   insertFolder,
+  insertNestedFolder,
   updateFolderById,
 } from "../../queries/folder.js";
 import e from "express";
 
 export const getNewFolder = (req, res) => {
-  res.render("pages/add-folder");
+  res.render("pages/add-folder", { path: "folders/new" });
   return;
 };
 
@@ -21,7 +22,10 @@ export const postNewFolder = [
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(400).render("pages/add-folder", { errors: errors.array() });
+      res.status(400).render("pages/add-folder", {
+        errors: errors.array(),
+        path: "folders/new",
+      });
       return;
     }
     try {
@@ -75,3 +79,33 @@ export const postDeleteFolder = async (req, res, next) => {
     next(error);
   }
 };
+export const getNestedNewFolder = (req, res) => {
+  const { folderId } = req.params;
+  res.render("pages/add-folder.ejs", { path: `folders/${folderId}/new` });
+};
+export const postNestedNewFolder = [
+  newFolderValidation,
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    const { folderId } = req.params;
+    if (!errors.isEmpty()) {
+      res.status(400).render("pages/add-folder", {
+        errors: errors.array(),
+        path: `folders/${folderId}/new`,
+      });
+      return;
+    }
+    const { folder_name } = matchedData(req);
+    try {
+      const newFolder = await insertNestedFolder(
+        Number(req.user.id),
+        Number(folderId),
+        folder_name,
+      );
+      res.redirect(`/folders/${folderId}`);
+      return;
+    } catch (error) {
+      next(error);
+    }
+  },
+];

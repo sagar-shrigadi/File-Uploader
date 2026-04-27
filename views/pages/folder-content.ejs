@@ -3,15 +3,33 @@
     <section>
         <h1>Welcome, <%= currentUser.username %></h1>
         <a href="/folders">View All Folders</a><br>
-        <a href="/folders/new">+ Create</a>
         <% if (locals.selectedFolder) { %>
             <article>
+                <% if(selectedFolder.parentId) {%>
+                    <a href="/folders/<%= selectedFolder.parentId %>">Back</a><br>
+                <% } %>
+                <a href="/folders/<%= selectedFolder.id %>/new">+ Create</a>
                 <h2><%= selectedFolder.name %></h2>
                 <a href="/folders/edit/<%= selectedFolder.id %>">Edit</a><br>
                 <form action="/folders/delete/<%= selectedFolder.id %>" method="post">
-                    <button type="submit" onclick="confirm(`Are you sure you want to delete folder <%= selectedFolder.name %>`)">Delete</button>
+                    <button type="submit" onclick="return confirm(`Are you sure you want to delete folder <%= selectedFolder.name %>\n(Warning: If <%= selectedFolder.name %> has any child folders or files, they will all be deleted as well!)`)">Delete</button>
                 </form>
             </article>
+            <% if(locals.childFolder) { %>
+                <section>
+                    <% childFolder.forEach(folder => { %>
+                        <article>
+                            <a href="/folders/<%= folder.id %>">
+                                <p><%= folder.name %></p>
+                            </a>
+                            <a href="/folders/edit/<%= folder.id %>">Edit</a>
+                            <form action="/folders/delete/<%= folder.id %>" method="post">
+                                <button type="submit" onclick="return confirm(`Are you sure you want to delete folder <%= folder.name %>\n(Warning: If <%= folder.name %> has any child folders or files, they will all be deleted as well!)`)">Delete</button>
+                            </form>
+                        </article>
+                    <%}) %>
+                </section>
+            <% } %>
         <% } %>
     </section>
 </main>

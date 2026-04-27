@@ -12,17 +12,29 @@ export const insertFolder = async (userId, folder_name) => {
     },
   });
 };
-
+export const insertNestedFolder = async (
+  userId,
+  parentFolderId,
+  folder_name,
+) => {
+  return await prisma.folder.create({
+    data: {
+      name: folder_name,
+      author: { connect: { id: userId } },
+      parent: { connect: { id: parentFolderId } },
+    },
+  });
+};
 export const getFolderById = async (folder_id) => {
   return await prisma.folder.findFirst({
     where: { id: folder_id },
+    include: { child: { orderBy: { id: "asc" } } },
   });
 };
-export const getAllFoldersByUser = async (user_id) => {
-  // all folders made by user with <user_id>
+export const getAllRootFoldersByUser = async (user_id) => {
+  // only root folders made by user with <user_id> (root = folders with no parentId)
   return await prisma.folder.findMany({
-    where: { authorId: user_id },
-    orderBy: { id: "asc" },
+    where: { authorId: user_id, parentId: null },
   });
 };
 export const updateFolderById = async (folder_id, new_name) => {

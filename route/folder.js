@@ -5,6 +5,8 @@ import {
   getNewFolder,
   postEditFolder,
   postNewFolder,
+  getNestedNewFolder,
+  postNestedNewFolder,
 } from "../controllers/forms/folder.js";
 import { getAllFolders, getSelectFolder } from "../controllers/folder.js";
 
@@ -17,6 +19,9 @@ folderRouter.post("/edit/:id", postEditFolder);
 
 folderRouter.get("/new", getNewFolder);
 folderRouter.post("/new", postNewFolder);
+
+folderRouter.get("/:folderId/new", getNestedNewFolder);
+folderRouter.post("/:folderId/new", postNestedNewFolder);
 
 folderRouter.get("/:id", getSelectFolder);
 folderRouter.get("/", getAllFolders);
