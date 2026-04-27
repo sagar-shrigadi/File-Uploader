@@ -1,3 +1,4 @@
+import { getAllRootFilesByUser } from "../queries/file.js";
 import { getAllRootFoldersByUser, getFolderById } from "../queries/folder.js";
 
 export const getSelectFolder = async (req, res, next) => {
@@ -18,10 +19,18 @@ export const getSelectFolder = async (req, res, next) => {
 export const getAllFolders = async (req, res, next) => {
   try {
     const { id } = req.user;
-    const allFoldersByCurrentUser = await getAllRootFoldersByUser(Number(id));
-    // allFoldersByCurrentUser.map((folder) => console.log(folder.name));
-    res.render("pages/index", { allFolders: allFoldersByCurrentUser });
-    return;
+
+    try {
+      const rootFolders = await getAllRootFoldersByUser(Number(id));
+      // rootFolders.map((folder) => console.log(folder.name));
+
+      const rootFiles = await getAllRootFilesByUser(Number(id));
+      res.render("pages/index", {
+        allFolders: rootFolders,
+        allFiles: rootFiles,
+      });
+      return;
+    } catch (error) {}
   } catch (error) {
     next(error);
   }

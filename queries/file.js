@@ -22,3 +22,19 @@ export const getFileById = async (file_id) => {
     where: { id: file_id },
   });
 };
+export const getAllRootFilesByUser = async (userId) => {
+  return await prisma.file.findMany({
+    where: { authorId: userId, parentId: null },
+  });
+};
+export const updateFileById = async (file_id, new_name) => {
+  return await prisma.file.update({
+    where: { id: file_id },
+    data: { name: new_name },
+  });
+};
+export const deleteFileById = async (file_id) => {
+  return await prisma.file.delete({
+    where: { id: file_id },
+  });
+};

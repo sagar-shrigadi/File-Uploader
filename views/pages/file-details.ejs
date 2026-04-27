@@ -1,9 +1,14 @@
 <%- include('../partials/header.ejs') %>
 <main>
     <h1>Welcome, <%= currentUser.username %></h1>
+    <a href="/folders">Home</a>
     <% if (locals.selectedFile) { %>
         <section>
             <h2><%= selectedFile.name %></h2>
+            <a href="/files/edit/<%= selectedFile.id %>">Rename</a>
+            <form action="/files/delete/<%= selectedFile.id %>" method="post">
+                <button type="submit" onclick="return confirm(`Are you sure you want to delete file <%= selectedFile.name %>?`)">Delete</button>
+            </form>
 
             <%# display file size in bytes and turn it into nicely formatted size in bytes/KB/MB %>
             <%# https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/file#examples %>
