@@ -81,7 +81,7 @@ export const postDeleteFolder = async (req, res, next) => {
 };
 export const getNestedNewFolder = (req, res) => {
   const { folderId } = req.params;
-  res.render("pages/add-folder.ejs", { path: `folders/${folderId}/new` });
+  res.render("pages/add-folder", { path: `folders/${folderId}/new` });
 };
 export const postNestedNewFolder = [
   newFolderValidation,

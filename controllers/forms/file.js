@@ -3,12 +3,13 @@ import {
   deleteFileById,
   getFileById,
   insertFile,
+  insertNestedFile,
   updateFileById,
 } from "../../queries/file.js";
 import { emptyErr } from "./signUp.js";
 
 export const getNewFile = (req, res) => {
-  res.render("pages/add-file");
+  res.render("pages/add-file", { path: "files/new" });
 };
 export const postNewFile = async (req, res, next) => {
   // req.file is "file_name" file
@@ -70,6 +71,30 @@ export const postDeleteFile = async (req, res, next) => {
     const { fileId } = req.params;
     await deleteFileById(Number(fileId));
     res.redirect("/folders");
+  } catch (error) {
+    next(error);
+  }
+};
+export const getNestedNewFile = async (req, res, next) => {
+  const { folderId } = req.params;
+  res.render("pages/add-file", { path: `folders/${folderId}/files/new` });
+};
+export const postNestedNewFile = async (req, res, next) => {
+  try {
+    const { folderId } = req.params;
+    const { id } = req.user;
+    const { originalname, filename, size, mimetype } = req.file;
+    await insertNestedFile(
+      Number(id),
+      originalname,
+      filename,
+      size,
+      mimetype,
+      Number(folderId),
+    );
+    // redirect to parent folder upon successful creation
+    res.redirect(`/folders/${folderId}`);
+    return;
   } catch (error) {
     next(error);
   }

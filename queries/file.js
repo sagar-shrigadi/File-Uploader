@@ -17,6 +17,25 @@ export const insertFile = async (
     },
   });
 };
+export const insertNestedFile = async (
+  userId,
+  original_name,
+  file_name,
+  file_size,
+  mimetype,
+  parentId,
+) => {
+  return await prisma.file.create({
+    data: {
+      name: original_name,
+      filenname: file_name,
+      size: file_size,
+      mimetype,
+      author: { connect: { id: userId } },
+      parent: { connect: { id: parentId } },
+    },
+  });
+};
 export const getFileById = async (file_id) => {
   return await prisma.file.findFirst({
     where: { id: file_id },

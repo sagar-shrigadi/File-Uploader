@@ -10,6 +10,7 @@ export const getSelectFolder = async (req, res, next) => {
     res.render("pages/folder-content", {
       selectedFolder,
       childFolder: selectedFolder.child,
+      childFiles: selectedFolder.files,
     });
     return;
   } catch (error) {

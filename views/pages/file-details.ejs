@@ -4,6 +4,10 @@
     <a href="/folders">Home</a>
     <% if (locals.selectedFile) { %>
         <section>
+            <% if(selectedFile.parentId) { %>
+                <a href="/folders/<%= selectedFile.parentId %>">Back</a>
+            <% } %>
+            <a href=""></a>
             <h2><%= selectedFile.name %></h2>
             <a href="/files/edit/<%= selectedFile.id %>">Rename</a>
             <form action="/files/delete/<%= selectedFile.id %>" method="post">

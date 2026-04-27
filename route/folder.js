@@ -9,6 +9,11 @@ import {
   postNestedNewFolder,
 } from "../controllers/forms/folder.js";
 import { getAllFolders, getSelectFolder } from "../controllers/folder.js";
+import {
+  getNestedNewFile,
+  postNestedNewFile,
+} from "../controllers/forms/file.js";
+import multer from "multer";
 
 export const folderRouter = Router({ mergeParams: true });
 
@@ -22,6 +27,15 @@ folderRouter.post("/new", postNewFolder);
 
 folderRouter.get("/:folderId/new", getNestedNewFolder);
 folderRouter.post("/:folderId/new", postNestedNewFolder);
+
+folderRouter.get("/:folderId/files/new", getNestedNewFile);
+
+const upload = multer({ dest: "uploads/" });
+folderRouter.post(
+  "/:folderId/files/new",
+  upload.single("file_name"),
+  postNestedNewFile,
+);
 
 folderRouter.get("/:id", getSelectFolder);
 folderRouter.get("/", getAllFolders);

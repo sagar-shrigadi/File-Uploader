@@ -28,7 +28,10 @@ export const insertNestedFolder = async (
 export const getFolderById = async (folder_id) => {
   return await prisma.folder.findFirst({
     where: { id: folder_id },
-    include: { child: { orderBy: { id: "asc" } } },
+    include: {
+      child: { orderBy: { id: "asc" } },
+      files: { orderBy: { id: "asc" } },
+    },
   });
 };
 export const getAllRootFoldersByUser = async (user_id) => {
