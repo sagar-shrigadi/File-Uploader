@@ -24,6 +24,7 @@ model User {
   username    String    @unique
   password    String
   folders     Folder[]  @relation("user-folder")
+  files       File[]    @relation("user-file")
 }
 
 model Folder {
@@ -35,4 +36,18 @@ model Folder {
   parentId    Int?
   parent      Folder?   @relation("folder-folder", fields: [parentId], references: [id], onDelete: Cascade)
   child       Folder[]  @relation("folder-folder")
+  files       File[]    @relation("folder-file")
+}
+
+model File {
+  id Int @id @default(autoincrement())
+  name String
+  filenname String
+  size Int
+  mimetype String
+  createdAt DateTime @default(now())
+  parentId Int?
+  parent Folder? @relation("folder-file", fields: [parentId], references: [id])
+  authorId Int
+  author  User  @relation("user-file", fields: [authorId], references: [id])
 }

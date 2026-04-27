@@ -10,6 +10,7 @@ import { serializeCb } from "./passport/serializeCallback.js";
 import { deserializeCb } from "./passport/deserializeCallback.js";
 import { indexRouter } from "./route/index.js";
 import { folderRouter } from "./route/folder.js";
+import { fileRouter } from "./route/files.js";
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.use(async (req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/files", fileRouter);
 app.use("/folders", folderRouter);
 app.use("/", indexRouter);
 

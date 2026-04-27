@@ -8,7 +8,8 @@
         <section>
             <article>
                 <h1>Welcome, <%= currentUser.username %></h1>
-                <a href="/folders/new">+ Create</a>
+                <a href="/folders/new">+ Create</a><br>
+                <a href="/files/new">^ Upload</a>
             </article>
             <% if (locals.allFolders) { %>
                 <section>
