@@ -12,6 +12,7 @@ import { getAllFolders, getSelectFolder } from "../controllers/folder.js";
 import {
   getNestedNewFile,
   postNestedNewFile,
+  validateNestedFile,
 } from "../controllers/forms/file.js";
 import multer from "multer";
 
@@ -35,6 +36,7 @@ const upload = multer({ storage: storage });
 folderRouter.post(
   "/:folderId/files/new",
   upload.single("file_name"),
+  validateNestedFile,
   postNestedNewFile,
 );
 

@@ -12,6 +12,17 @@ import { supabaseStorage } from "../../lib/supabse.js";
 export const getNewFile = (req, res) => {
   res.render("pages/add-file", { path: "files/new" });
 };
+export const validateFile = (req, res, next) => {
+  const { size } = req.file;
+  if (size > 2 * 1e6) {
+    res.render("pages/add-file", {
+      errors: [{ msg: "File size must be under 2 MB" }],
+      path: "files/new",
+    });
+    return;
+  }
+  next();
+};
 export const postNewFile = async (req, res, next) => {
   // req.file is "file_name" file
   // req.file.buffer contains file
@@ -103,6 +114,18 @@ export const postDeleteFile = async (req, res, next) => {
 export const getNestedNewFile = async (req, res, next) => {
   const { folderId } = req.params;
   res.render("pages/add-file", { path: `folders/${folderId}/files/new` });
+};
+export const validateNestedFile = (req, res, next) => {
+  const { folderId } = req.params;
+  const { size } = req.file;
+  if (size > 2 * 1e6) {
+    res.render("pages/add-file", {
+      errors: [{ msg: "File size must be under 2 MB" }],
+      path: `folders/${folderId}/files/new`,
+    });
+    return;
+  }
+  next();
 };
 export const postNestedNewFile = async (req, res, next) => {
   try {

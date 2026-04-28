@@ -5,6 +5,7 @@ import {
   postDeleteFile,
   postEditFile,
   postNewFile,
+  validateFile,
 } from "../controllers/forms/file.js";
 import multer from "multer";
 import { downloadSelectFile, getSelectFile } from "../controllers/file.js";
@@ -22,7 +23,7 @@ fileRouter.get("/new", getNewFile);
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 // upload.single will take the "name" value of file input
-fileRouter.post("/new", upload.single("file_name"), postNewFile);
+fileRouter.post("/new", upload.single("file_name"), validateFile, postNewFile);
 
 fileRouter.get("/:fileId/download", downloadSelectFile);
 // get specific file
