@@ -30,7 +30,8 @@ folderRouter.post("/:folderId/new", postNestedNewFolder);
 
 folderRouter.get("/:folderId/files/new", getNestedNewFile);
 
-const upload = multer({ dest: "uploads/" });
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 folderRouter.post(
   "/:folderId/files/new",
   upload.single("file_name"),

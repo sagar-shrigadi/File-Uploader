@@ -1,3 +1,4 @@
+import { supabaseStorage } from "../lib/supabse.js";
 import { getFileById } from "../queries/file.js";
 
 export const getSelectFile = async (req, res, next) => {
@@ -7,4 +8,29 @@ export const getSelectFile = async (req, res, next) => {
     const selectedFile = await getFileById(Number(fileId));
     res.render("pages/file-details", { selectedFile });
   } catch (error) {}
+};
+export const downloadSelectFile = async (req, res, next) => {
+  const { fileId } = req.params;
+
+  try {
+    const selectedFile = await getFileById(Number(fileId));
+    console.log(selectedFile);
+    // download file using supabase
+    const { data, error } = await supabaseStorage
+      .from("images")
+      .download(selectedFile.url);
+
+    if (error) throw error;
+
+    const buffer = Buffer.from(await data.arrayBuffer());
+
+    res.set({
+      "Content-type": selectedFile.mimetype,
+      "Content-disposition": `attachment; filename="${selectedFile.name}"`,
+      "Content-Length": buffer.length,
+    });
+    return res.send(buffer);
+  } catch (error) {
+    next(error);
+  }
 };

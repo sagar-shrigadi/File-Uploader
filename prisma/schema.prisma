@@ -42,10 +42,10 @@ model Folder {
 model File {
   id          Int       @id @default(autoincrement())
   name        String
-  filenname   String
   size        Int
   mimetype    String
   createdAt   DateTime  @default(now())
+  url         String
   parentId    Int?
   parent      Folder?   @relation("folder-file", fields: [parentId], references: [id], onDelete: Cascade)
   authorId    Int

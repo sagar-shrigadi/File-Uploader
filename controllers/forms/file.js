@@ -7,25 +7,44 @@ import {
   updateFileById,
 } from "../../queries/file.js";
 import { emptyErr } from "./signUp.js";
+import { supabaseStorage } from "../../lib/supabse.js";
 
 export const getNewFile = (req, res) => {
   res.render("pages/add-file", { path: "files/new" });
 };
 export const postNewFile = async (req, res, next) => {
   // req.file is "file_name" file
-  // req.body will contain the text fields, if there were any
-
+  // req.file.buffer contains file
   console.log("file contents: ", req.file);
-  console.log("file text field", req.body);
   try {
     const { id } = req.user;
-    const { originalname, filename, size, mimetype } = req.file;
+    const { originalname, size, mimetype, buffer } = req.file;
+
+    // upload to supabase
+    const { data, error } = await supabaseStorage
+      .from("images")
+      // originalname will be the file path where the image will be stored on supabase
+      // full path will be images/<original_name>
+      // buffer is the actual file to upload
+      .upload(originalname, buffer, { contentType: mimetype });
+    if (error) {
+      console.log(`Supabase upload error`, error.message);
+      return res.status(500).send("Upload failed");
+    }
+
+    // example data object returned from supabase after successful upload
+    // {
+    //   "path": "image-jonathan.jpg",
+    //   "id": "<id_generated_by_supabase",
+    //   "fullPath": "images/image-jonathan.jpg"
+    // }
+
     const newFile = await insertFile(
       Number(id),
       originalname,
-      filename,
       size,
       mimetype,
+      data.path,
     );
     res.redirect(`/files/${newFile.id}`);
     return;
@@ -69,7 +88,13 @@ export const postEditFile = [
 export const postDeleteFile = async (req, res, next) => {
   try {
     const { fileId } = req.params;
-    await deleteFileById(Number(fileId));
+    const deletedFile = await deleteFileById(Number(fileId));
+    const { data, error } = await supabaseStorage
+      .from("images")
+      .remove([`${deletedFile.url}`]);
+    if (error) throw error;
+    // console.log(data);
+    // console.log("deleted file", deletedFile);
     res.redirect("/folders");
   } catch (error) {
     next(error);
@@ -83,14 +108,34 @@ export const postNestedNewFile = async (req, res, next) => {
   try {
     const { folderId } = req.params;
     const { id } = req.user;
-    const { originalname, filename, size, mimetype } = req.file;
+    const { originalname, size, mimetype, buffer } = req.file;
+
+    // upload to supabase
+    const { data, error } = await supabaseStorage
+      .from("images")
+      // originalname will be the file path where the image will be stored on supabase
+      // full path will be images/<original_name>
+      // buffer is the actual file to upload
+      .upload(originalname, buffer, { contentType: mimetype });
+    if (error) {
+      console.log(`Supabase upload error`, error.message);
+      return res.status(500).send("Upload failed");
+    }
+
+    // example data object returned from supabase after successful upload
+    // {
+    //   "path": "image-jonathan.jpg",
+    //   "id": "<id_generated_by_supabase",
+    //   "fullPath": "images/image-jonathan.jpg"
+    // }
+
     await insertNestedFile(
       Number(id),
       originalname,
-      filename,
       size,
       mimetype,
       Number(folderId),
+      data.path,
     );
     // redirect to parent folder upon successful creation
     res.redirect(`/folders/${folderId}`);

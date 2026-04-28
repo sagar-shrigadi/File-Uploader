@@ -3,16 +3,16 @@ import { prisma } from "../lib/prisma.js";
 export const insertFile = async (
   userId,
   original_name,
-  file_name,
   file_size,
   mimetype,
+  file_path,
 ) => {
   return await prisma.file.create({
     data: {
       name: original_name,
-      filenname: file_name,
       size: file_size,
       mimetype,
+      url: file_path,
       author: { connect: { id: userId } },
     },
   });
@@ -20,17 +20,17 @@ export const insertFile = async (
 export const insertNestedFile = async (
   userId,
   original_name,
-  file_name,
   file_size,
   mimetype,
   parentId,
+  file_path,
 ) => {
   return await prisma.file.create({
     data: {
       name: original_name,
-      filenname: file_name,
       size: file_size,
       mimetype,
+      url: file_path,
       author: { connect: { id: userId } },
       parent: { connect: { id: parentId } },
     },

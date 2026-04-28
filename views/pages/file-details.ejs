@@ -25,6 +25,7 @@
             <% } %>
 
             <p><%= selectedFile.createdAt.toLocaleString() %></p>
+            <a href="/files/<%= selectedFile.id %>/download">Download</a>
         </section>
     <% } %>
 </main>
