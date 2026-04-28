@@ -7,7 +7,10 @@ import {
 } from "./signUp.js";
 
 export const getLogin = (req, res) => {
-  res.render("pages/login", { formAction: "login", formBtnText: "Log In" });
+  return res.render("pages/login", {
+    formAction: "login",
+    formBtnText: "Log In",
+  });
 };
 export const postLogin = [
   signUpValidation,

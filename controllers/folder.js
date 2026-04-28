@@ -21,17 +21,15 @@ export const getAllFolders = async (req, res, next) => {
   try {
     const { id } = req.user;
 
-    try {
-      const rootFolders = await getAllRootFoldersByUser(Number(id));
-      // rootFolders.map((folder) => console.log(folder.name));
+    const rootFolders = await getAllRootFoldersByUser(Number(id));
+    // rootFolders.map((folder) => console.log(folder.name));
 
-      const rootFiles = await getAllRootFilesByUser(Number(id));
-      res.render("pages/index", {
-        allFolders: rootFolders,
-        allFiles: rootFiles,
-      });
-      return;
-    } catch (error) {}
+    const rootFiles = await getAllRootFilesByUser(Number(id));
+    res.render("pages/index", {
+      allFolders: rootFolders,
+      allFiles: rootFiles,
+    });
+    return;
   } catch (error) {
     next(error);
   }

@@ -33,7 +33,7 @@ export const postNewFolder = [
       const { id } = req.user;
       const newFolder = await insertFolder(Number(id), folder_name);
       //   console.log(`view newly created folder details`, newFolder);
-      res.redirect(`/folders/${newFolder.id}`);
+      res.status(201).redirect(`/folders/${newFolder.id}`);
       return;
     } catch (error) {
       next(error);
@@ -62,7 +62,7 @@ export const postEditFolder = [
       const { folder_name } = matchedData(req);
       const { id } = req.params;
       await updateFolderById(Number(id), folder_name);
-      res.redirect(`/folders/${id}`);
+      res.status(204).redirect(`/folders/${id}`);
       return;
     } catch (error) {
       next(error);
@@ -73,7 +73,7 @@ export const postDeleteFolder = async (req, res, next) => {
   try {
     const { id } = req.params;
     await deleteFolderById(Number(id));
-    res.redirect("/folders");
+    res.status(204).redirect("/folders");
     return;
   } catch (error) {
     next(error);
@@ -82,6 +82,7 @@ export const postDeleteFolder = async (req, res, next) => {
 export const getNestedNewFolder = (req, res) => {
   const { folderId } = req.params;
   res.render("pages/add-folder", { path: `folders/${folderId}/new` });
+  return;
 };
 export const postNestedNewFolder = [
   newFolderValidation,
@@ -102,7 +103,7 @@ export const postNestedNewFolder = [
         Number(folderId),
         folder_name,
       );
-      res.redirect(`/folders/${folderId}`);
+      res.status(201).redirect(`/folders/${folderId}`);
       return;
     } catch (error) {
       next(error);

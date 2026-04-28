@@ -10,12 +10,12 @@ import { emptyErr } from "./signUp.js";
 import { supabaseStorage } from "../../lib/supabse.js";
 
 export const getNewFile = (req, res) => {
-  res.render("pages/add-file", { path: "files/new" });
+  return res.render("pages/add-file", { path: "files/new" });
 };
 export const validateFile = (req, res, next) => {
   const { size } = req.file;
   if (size > 2 * 1e6) {
-    res.render("pages/add-file", {
+    res.status(413).render("pages/add-file", {
       errors: [{ msg: "File size must be under 2 MB" }],
       path: "files/new",
     });
@@ -57,7 +57,7 @@ export const postNewFile = async (req, res, next) => {
       mimetype,
       data.path,
     );
-    res.redirect(`/files/${newFile.id}`);
+    res.status(201).redirect(`/files/${newFile.id}`);
     return;
   } catch (error) {
     next(error);
@@ -68,8 +68,10 @@ export const getEditFile = async (req, res, next) => {
     const { fileId } = req.params;
     const fileToEdit = await getFileById(Number(fileId));
 
-    res.render("pages/edit-file", { fileToEdit });
-  } catch (error) {}
+    return res.render("pages/edit-file", { fileToEdit });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const fileNameValidation = [
@@ -90,7 +92,7 @@ export const postEditFile = [
     try {
       const { new_file_name } = matchedData(req);
       await updateFileById(Number(fileId), new_file_name);
-      res.redirect(`/files/${fileId}`);
+      return res.status(204).redirect(`/files/${fileId}`);
     } catch (error) {
       next(error);
     }
@@ -106,20 +108,22 @@ export const postDeleteFile = async (req, res, next) => {
     if (error) throw error;
     // console.log(data);
     // console.log("deleted file", deletedFile);
-    res.redirect("/folders");
+    return res.status(204).redirect("/folders");
   } catch (error) {
     next(error);
   }
 };
 export const getNestedNewFile = async (req, res, next) => {
   const { folderId } = req.params;
-  res.render("pages/add-file", { path: `folders/${folderId}/files/new` });
+  return res.render("pages/add-file", {
+    path: `folders/${folderId}/files/new`,
+  });
 };
 export const validateNestedFile = (req, res, next) => {
   const { folderId } = req.params;
   const { size } = req.file;
   if (size > 2 * 1e6) {
-    res.render("pages/add-file", {
+    res.status(413).render("pages/add-file", {
       errors: [{ msg: "File size must be under 2 MB" }],
       path: `folders/${folderId}/files/new`,
     });
@@ -161,7 +165,7 @@ export const postNestedNewFile = async (req, res, next) => {
       data.path,
     );
     // redirect to parent folder upon successful creation
-    res.redirect(`/folders/${folderId}`);
+    res.status(201).redirect(`/folders/${folderId}`);
     return;
   } catch (error) {
     next(error);

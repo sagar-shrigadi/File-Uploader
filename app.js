@@ -59,6 +59,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/files", fileRouter);
 app.use("/folders", folderRouter);
 app.use("/", indexRouter);
+app.get("/{*splat}", (req, res, next) =>
+  res.status(404).send("404 Not Found!"),
+);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, (err) => {

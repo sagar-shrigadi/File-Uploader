@@ -6,8 +6,10 @@ export const getSelectFile = async (req, res, next) => {
 
   try {
     const selectedFile = await getFileById(Number(fileId));
-    res.render("pages/file-details", { selectedFile });
-  } catch (error) {}
+    return res.render("pages/file-details", { selectedFile });
+  } catch (error) {
+    next(error);
+  }
 };
 export const downloadSelectFile = async (req, res, next) => {
   const { fileId } = req.params;

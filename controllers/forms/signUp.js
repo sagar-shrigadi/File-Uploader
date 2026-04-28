@@ -3,7 +3,7 @@ import * as argon2 from "argon2";
 import { insertUser } from "../../queries/user.js";
 
 export const getSignUp = (req, res) => {
-  res.render("pages/sign-up", {
+  return res.render("pages/sign-up", {
     formAction: "sign-up",
     formBtnText: "Sign Up",
   });
@@ -25,9 +25,11 @@ export const signUpValidation = [
     .isLength({ min: 6 })
     .withMessage(`Password ${passwordMinLenErr}`),
 
-  body("confirmPassword").custom((value, { req }) => {
-    return value === req.body.password;
-  }),
+  body("confirmPassword")
+    .custom((value, { req }) => {
+      return value === req.body.password;
+    })
+    .withMessage(`Confirm password must be same as password!`),
 ];
 export const postSignUp = [
   signUpValidation,

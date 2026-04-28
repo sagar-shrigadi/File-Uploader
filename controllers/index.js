@@ -1,11 +1,15 @@
 export const getIndex = (req, res) => {
-  res.render("pages/index");
+  if (req.isAuthenticated()) {
+    return res.redirect("/folders");
+  } else {
+    return res.redirect("/login");
+  }
 };
 export const getLogout = (req, res, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);
     }
-    res.redirect("/login");
+    return res.redirect("/login");
   });
 };
