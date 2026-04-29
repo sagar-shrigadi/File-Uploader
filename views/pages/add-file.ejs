@@ -1,6 +1,14 @@
 <%- include('../partials/header.ejs') %>
 <main>
-    <%- include('../partials/error.ejs') %>
-    <%- include('../partials/fileForm.ejs') %>
+    <section class="file form add-file">
+        <%- include('../partials/error.ejs') %>
+        <form action="/<%= path %>" method="post" enctype="multipart/form-data" class="add">
+            <div>
+                <label for="file_name">Choose an image file (png, jpg or jpeg) to upload (under 2 MB)</label>
+                <input type="file" name="file_name" id="file_name" accept=".jpg, .jpeg, .png" required>
+            </div>
+            <button type="submit" class="link_btn">Upload</button>
+        </form>
+    </section>
 </main>
 <%- include('../partials/footer.ejs') %>

@@ -40,7 +40,7 @@ export const postNewFile = async (req, res, next) => {
       .upload(originalname, buffer, { contentType: mimetype });
     if (error) {
       console.log(`Supabase upload error`, error.message);
-      return res.status(500).send("Upload failed");
+      return res.status(500).send(`Internal server error`);
     }
 
     // example data object returned from supabase after successful upload
@@ -146,7 +146,7 @@ export const postNestedNewFile = async (req, res, next) => {
       .upload(originalname, buffer, { contentType: mimetype });
     if (error) {
       console.log(`Supabase upload error`, error.message);
-      return res.status(500).send("Upload failed");
+      return res.status(500).send(`Internal server error`);
     }
 
     // example data object returned from supabase after successful upload

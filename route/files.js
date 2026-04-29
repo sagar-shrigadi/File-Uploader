@@ -8,7 +8,7 @@ import {
   validateFile,
 } from "../controllers/forms/file.js";
 import multer from "multer";
-import { downloadSelectFile, getSelectFile } from "../controllers/file.js";
+import { downloadSelectFile } from "../controllers/file.js";
 
 export const fileRouter = Router({ mergeParams: true });
 
@@ -26,5 +26,3 @@ const upload = multer({ storage: storage });
 fileRouter.post("/new", upload.single("file_name"), validateFile, postNewFile);
 
 fileRouter.get("/:fileId/download", downloadSelectFile);
-// get specific file
-fileRouter.get("/:fileId", getSelectFile);

@@ -3,18 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/images/upload.png" type="image/x-icon">
+    <!-- <a href="https://www.flaticon.com/free-icons/upload" title="upload icons">Upload icons created by bukeicon - Flaticon</a> -->
     <title>File Uploader</title>
+    <link rel="stylesheet" href="/styles/reset.css">
+    <link rel="stylesheet" href="/styles/style.css">
 </head>
 <body>
     <header>
-        <h1>File Uploader</h1>
+        <a href="/">
+            <h1>File Uploader</h1>
+        </a>
         <nav>
             <ul>
                 <% if (locals.currentUser) { %>
-                    <li><a href="/logout">Logout</a></li>
+                    <li><a href="/logout" class="link_btn">Logout</a></li>
                 <% } else { %>
-                    <li><a href="/login">Login</a></li>
-                    <li><a href="/sign-up">Sign Up</a></li>
+                    <li><a href="/login" class="link_btn">Login</a></li>
+                    <li><a href="/sign-up" class="link_btn">Sign Up</a></li>
                 <% } %>
             </ul>
         </nav>

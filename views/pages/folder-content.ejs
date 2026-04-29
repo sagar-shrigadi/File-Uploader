@@ -1,53 +1,133 @@
 <%- include('../partials/header.ejs') %>
 <main>
-    <section>
-        <h1>Welcome, <%= currentUser.username %></h1>
-        <a href="/folders">View All Folders</a><br>
+    <% if (locals.currentUser) { %>
         <% if (locals.selectedFolder) { %>
-            <article>
-                <% if(selectedFolder.parentId) {%>
-                    <a href="/folders/<%= selectedFolder.parentId %>">Back</a><br>
+            <section class="selectFolder">
+                <article class="_header">
+                    <div class="pageLinks">
+                        <a href="/folders" class="link_btn">Home</a>
+                        <a href="/folders/<%= selectedFolder.parentId %>" class="link_btn">Back</a>
+                    </div>
+                    <div class="_details">
+                        <div class="_left">
+                            <h2><%= selectedFolder.name %></h2>
+                            <div class="actions">
+                                <a href="/folders/edit/<%= selectedFolder.id %>">
+                                    <%- include('../partials/svg/editSvg.ejs') %>
+                                </a>
+                                <form action="/folders/delete/<%= selectedFolder.id %>" method="post">
+                                    <button type="submit" onclick="return confirm(`Are you sure you want to delete folder <%= selectedFolder.name %>\n(Warning: If <%= selectedFolder.name %> has any child folders or files, they will all be deleted as well!)`)">
+                                        <%- include('../partials/svg/deleteSvg.ejs') %>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="links">
+                            <a href="/folders/<%= selectedFolder.id %>/new" class="link_btn">
+                                <%- include('../partials/svg/createSvg.ejs') %>
+                                Create
+                            </a>
+                            <a href="/folders/<%= selectedFolder.id %>/files/new" class="link_btn">
+                                <%- include('../partials/svg/uploadSvg.ejs') %>
+                                Upload
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                <% if(locals.childFolder) { %>
+                    <section class="_folders">
+                        <% childFolder.forEach(folder => { %>
+                            <article>
+                                <a href="/folders/<%= folder.id %>">
+                                    <div class="header">
+                                        <%- include('../partials/svg/folderSvg.ejs') %>
+                                        <h3><%= folder.name %></h3>
+                                    </div>
+                                </a>
+                                <div class="actions">
+                                    <a href="/folders/edit/<%= folder.id %>">
+                                        <%- include('../partials/svg/editSvg.ejs') %>
+                                    </a>
+                                    <form action="/folders/delete/<%= folder.id %>" method="post">
+                                        <button type="submit" onclick="return confirm(`Are you sure you want to delete folder <%= folder.name %>\n(Warning: If <%= folder.name %> has any child folders or files, they will all be deleted as well!)`)">
+                                            <%- include('../partials/svg/deleteSvg.ejs') %>
+                                        </button>
+                                    </form>
+                                </div>
+                            </article>
+                        <% }) %>
+                    </section>
                 <% } %>
-                <a href="/folders/<%= selectedFolder.id %>/new">+ Create</a><br>
-                <a href="/folders/<%= selectedFolder.id %>/files/new">^ Upload</a>
-                <h2><%= selectedFolder.name %></h2>
-                <a href="/folders/edit/<%= selectedFolder.id %>">Edit</a><br>
-                <form action="/folders/delete/<%= selectedFolder.id %>" method="post">
-                    <button type="submit" onclick="return confirm(`Are you sure you want to delete folder <%= selectedFolder.name %>\n(Warning: If <%= selectedFolder.name %> has any child folders or files, they will all be deleted as well!)`)">Delete</button>
-                </form>
-            </article>
-            <% if(locals.childFolder) { %>
-                <section>
-                    <% childFolder.forEach(folder => { %>
-                        <article>
-                            <a href="/folders/<%= folder.id %>">
-                                <p><%= folder.name %></p>
-                            </a>
-                            <a href="/folders/edit/<%= folder.id %>">Edit</a>
-                            <form action="/folders/delete/<%= folder.id %>" method="post">
-                                <button type="submit" onclick="return confirm(`Are you sure you want to delete folder <%= folder.name %>\n(Warning: If <%= folder.name %> has any child folders or files, they will all be deleted as well!)`)">Delete</button>
-                            </form>
-                        </article>
-                    <%}) %>
-                </section>
-            <% } %>
-            <% if(locals.childFiles) { %>
-                <section>
-                    <% childFiles.forEach(file => { %>
-                        <article>
-                            <a href="/files/<%= file.id %>">
-                                <p><%= file.name %></p>
-                            </a>
-                            <a href="/files/<%= file.id %>/download">Download</a><br>
-                            <a href="/files/edit/<%= file.id %>">Rename</a><br>
-                            <form action="/files/delete/<%= file.id %>" method="post">
-                                <button type="submit" onclick="return confirm(`Are you sure you want to delete file <%= file.name %>?`)">Delete</button>
-                            </form>
-                        </article>
-                    <% }) %>
-                </section>
-            <% } %>
+                <% if(locals.childFiles) { %>
+                    <section class="_files">
+                        <% childFiles.forEach(file => { %>
+                            <article>
+                                <button popovertarget="fileDetailsAside-<%= file.id %>" popovertargetaction="show" class="popoverBtn">
+                                    <div class="header">
+                                        <%- include('../partials/svg/imageIconSvg.ejs') %>
+                                        <h3><%= file.name %></h3>
+                                    </div>
+                                </button>
+                                <div class="actions">
+                                    <a href="/files/edit/<%= file.id %>">
+                                        <%- include('../partials/svg/editSvg.ejs') %>
+                                    </a>
+                                    <form action="/files/delete/<%= file.id %>" method="post">
+                                        <button type="submit" onclick="return confirm(`Are you sure you want to delete file <%= file.name %>?`)">
+                                            <%- include('../partials/svg/deleteSvg.ejs') %>
+                                        </button>
+                                    </form>
+                                </div>
+                            </article>
+                            <div class="fileDetailsAside" popover id="fileDetailsAside-<%= file.id %>">
+                                <div class="asideheader">
+                                    <div>
+                                        <h3>File Information</h3>
+                                        <button popovertarget="fileDetailsAside-<%= file.id %>" popovertargetaction="hide">
+                                            <%- include('../partials/svg/closeSvg.ejs') %>
+                                        </button>
+                                    </div>
+                                    <div class="fileDetails">
+                                        <p>
+                                            <strong>Name: </strong>
+                                            <%= file.name %>
+                                        </p>
+                                        <p>
+                                            <strong>Type: </strong>
+                                            <%= file.mimetype %>
+                                        </p>
+                                        <%# display file size in bytes and turn it into nicely formatted size in bytes/KB/MB %>
+                                        <%# https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/file#examples %>
+                                        <% if (file.size < 1e3) { %>
+                                            <p><strong>Size: </strong> <%= file.size %> Bytes</p>
+                                        <% } else if (file.size >= 1e3 && file.size < 1e6) { %>
+                                            <p><strong>Size: </strong> <%= (file.size / 1e3).toFixed(1) %> KB</p>
+                                        <% } else { %>
+                                            <p><strong>Size: </strong> <%= (file.size / 1e6).toFixed(1) %> MB</p>
+                                        <% } %>
+                                        <p>
+                                            <strong>Created At: </strong>
+                                            <%= file.createdAt.toLocaleString() %>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="fileActions">
+                                    <a href="/files/edit/<%= file.id %>" class="link_btn">Rename</a>
+
+                                    <form action="/files/delete/<%= file.id %>" method="post" class="link_btn">
+                                        <button type="submit" onclick="return confirm(`Are you sure you want to delete file <%= file.name %>?`)">
+                                            Delete
+                                        </button>
+                                    </form>
+
+                                    <a href="/files/<%= file.id %>/download" class="link_btn downloadBtn">Download</a>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </section>
+                <% } %>
+            </section>
         <% } %>
-    </section>
+    <% } %>
 </main>
 <%- include('../partials/footer.ejs') %>

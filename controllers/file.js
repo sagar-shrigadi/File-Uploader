@@ -1,16 +1,6 @@
 import { supabaseStorage } from "../lib/supabse.js";
 import { getFileById } from "../queries/file.js";
 
-export const getSelectFile = async (req, res, next) => {
-  const { fileId } = req.params;
-
-  try {
-    const selectedFile = await getFileById(Number(fileId));
-    return res.render("pages/file-details", { selectedFile });
-  } catch (error) {
-    next(error);
-  }
-};
 export const downloadSelectFile = async (req, res, next) => {
   const { fileId } = req.params;
 

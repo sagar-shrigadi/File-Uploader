@@ -1,6 +1,14 @@
 <%- include('../partials/header.ejs') %>
 <main>
-    <%- include('../partials/error.ejs') %>
-    <%- include('../partials/folderForm.ejs') %>
+    <section class="folder form">
+        <%- include('../partials/error.ejs') %>
+        <form action="/<%= path %>" method="post" class="add">
+            <div>
+                <label for="folder_name">New Folder</label>
+                <input type="text" name="folder_name" id="folder_name" required>
+            </div>
+            <button type="submit" class="link_btn">Create</button>
+        </form>
+    </section>
 </main>
 <%- include('../partials/footer.ejs') %>

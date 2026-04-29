@@ -1,12 +1,14 @@
 <%- include('../partials/header.ejs') %>
 <main>
-    <%- include('../partials/error.ejs') %>
-        <form action="/folders/edit/<%= folderToEdit.id %>" method="post">
+    <section class="folder form">
+        <%- include('../partials/error.ejs') %>
+        <form action="/folders/edit/<%= folderToEdit.id %>" method="post" class="edit">
             <div>
                 <label for="folder_name">Edit Folder</label>
                 <input type="text" name="folder_name" id="folder_name" value="<%= folderToEdit.name %>" required>
             </div>
-            <button type="submit">Edit</button>
+            <button type="submit" class="link_btn">Edit</button>
         </form>
+    </section>
 </main>
 <%- include('../partials/footer.ejs') %>
