@@ -4,7 +4,7 @@
         <form action="/files/edit/<%= fileToEdit.id %>" method="post" class="edit">
             <div>
                 <label for="new_file_name">Rename File </label>
-                <input type="text" name="new_file_name" id="new_file_name" value="<%= fileToEdit.name %>" required>
+                <input type="text" name="new_file_name" id="new_file_name" value="<%= fileToEdit.name %>" autofocus required>
             </div>
             <button type="submit" class="link_btn">Rename</button>
         </form>
