@@ -11,6 +11,8 @@ import { deserializeCb } from "./passport/deserializeCallback.js";
 import { indexRouter } from "./route/index.js";
 import { folderRouter } from "./route/folder.js";
 import { fileRouter } from "./route/files.js";
+import { isAuthenticated } from "./controllers/index.js";
+import { authRouter } from "./route/auth.js";
 
 const app = express();
 
@@ -56,12 +58,17 @@ app.use(async (req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// login/sign-up public routes
+app.use("/", authRouter);
+
+// checks if user is logged in else redirects to login page
+app.use(isAuthenticated);
+
+// private routes
 app.use("/files", fileRouter);
 app.use("/folders", folderRouter);
 app.use("/", indexRouter);
-app.get("/{*splat}", (req, res, next) =>
-  res.status(404).send("404 Not Found!"),
-);
+app.use((req, res) => res.status(404).render("pages/404"));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, (err) => {

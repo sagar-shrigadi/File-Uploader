@@ -38,6 +38,7 @@ export const getAllRootFoldersByUser = async (user_id) => {
   // only root folders made by user with <user_id> (root = folders with no parentId)
   return await prisma.folder.findMany({
     where: { authorId: user_id, parentId: null },
+    orderBy: { id: "asc" },
   });
 };
 export const updateFolderById = async (folder_id, new_name) => {

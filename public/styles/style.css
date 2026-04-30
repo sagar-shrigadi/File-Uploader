@@ -117,7 +117,7 @@ header {
     text-decoration: none;
   }
 }
-main {
+main:not([class]) {
   flex-grow: 1;
   display: grid;
   place-items: center;
@@ -387,5 +387,40 @@ footer {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+  }
+}
+.errorPage {
+  > section {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #c8273e;
+    color: black;
+
+    h1 {
+      font-size: 192px;
+      font-family: inherit;
+      color: inherit;
+      font-weight: 700;
+    }
+    h2 {
+      font-size: 3rem;
+      margin-block: 0.5rem;
+    }
+    p {
+      font-size: 2rem;
+      max-width: 35ch;
+      text-align: center;
+      margin-block: 0.5rem 1rem;
+    }
+    .link_btn {
+      background-color: black;
+      color: var(--text);
+    }
+    .link_btn:hover {
+      background-color: oklch(from black 30% c h);
+    }
   }
 }

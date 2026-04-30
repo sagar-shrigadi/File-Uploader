@@ -3,8 +3,14 @@ import { getAllRootFoldersByUser, getFolderById } from "../queries/folder.js";
 
 export const getSelectFolder = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const selectedFolder = await getFolderById(Number(id));
+    const folderId = Number(req.params.id);
+    if (isNaN(folderId)) {
+      return res
+        .status(404)
+        .render("pages/404", { message: "Invalid Folder ID" });
+    }
+
+    const selectedFolder = await getFolderById(folderId);
     // console.log(`view selected folder details: `, selectedFolder);
 
     res.render("pages/folder-content", {
@@ -19,12 +25,12 @@ export const getSelectFolder = async (req, res, next) => {
 };
 export const getAllFolders = async (req, res, next) => {
   try {
-    const { id } = req.user;
+    const userId = Number(req.user.id);
 
-    const rootFolders = await getAllRootFoldersByUser(Number(id));
+    const rootFolders = await getAllRootFoldersByUser(userId);
     // rootFolders.map((folder) => console.log(folder.name));
 
-    const rootFiles = await getAllRootFilesByUser(Number(id));
+    const rootFiles = await getAllRootFilesByUser(userId);
     res.render("pages/index", {
       allFolders: rootFolders,
       allFiles: rootFiles,

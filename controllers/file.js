@@ -3,6 +3,9 @@ import { getFileById } from "../queries/file.js";
 
 export const downloadSelectFile = async (req, res, next) => {
   const { fileId } = req.params;
+  if (isNaN(fileId)) {
+    return res.status(404).render("pages/404", { message: "Invalid File ID" });
+  }
 
   try {
     const selectedFile = await getFileById(Number(fileId));

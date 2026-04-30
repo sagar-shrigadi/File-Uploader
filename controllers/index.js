@@ -13,3 +13,10 @@ export const getLogout = (req, res, next) => {
     return res.redirect("/login");
   });
 };
+export const isAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    return res.redirect("/login");
+  }
+};

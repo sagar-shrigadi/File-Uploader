@@ -28,7 +28,7 @@ export const postNewFile = async (req, res, next) => {
   // req.file.buffer contains file
   console.log("file contents: ", req.file);
   try {
-    const { id } = req.user;
+    const userId = Number(req.user.id);
     const { originalname, size, mimetype, buffer } = req.file;
 
     // upload to supabase
@@ -51,7 +51,7 @@ export const postNewFile = async (req, res, next) => {
     // }
 
     const newFile = await insertFile(
-      Number(id),
+      userId,
       originalname,
       size,
       mimetype,
@@ -82,6 +82,11 @@ export const postEditFile = [
   async (req, res, next) => {
     const errors = validationResult(req);
     const { fileId } = req.params;
+    if (isNaN(fileId)) {
+      return res
+        .status(404)
+        .render("pages/404", { message: "Invalid File ID" });
+    }
     const fileToEdit = await getFileById(Number(fileId));
     if (!errors.isEmpty()) {
       res
@@ -101,6 +106,11 @@ export const postEditFile = [
 export const postDeleteFile = async (req, res, next) => {
   try {
     const { fileId } = req.params;
+    if (isNaN(fileId)) {
+      return res
+        .status(404)
+        .render("pages/404", { message: "Invalid File ID" });
+    }
     const deletedFile = await deleteFileById(Number(fileId));
     const { data, error } = await supabaseStorage
       .from("images")
@@ -115,12 +125,22 @@ export const postDeleteFile = async (req, res, next) => {
 };
 export const getNestedNewFile = async (req, res, next) => {
   const { folderId } = req.params;
+  if (isNaN(folderId)) {
+    return res
+      .status(404)
+      .render("pages/404", { message: "Invalid Folder ID" });
+  }
   return res.render("pages/add-file", {
     path: `folders/${folderId}/files/new`,
   });
 };
 export const validateNestedFile = (req, res, next) => {
   const { folderId } = req.params;
+  if (isNaN(folderId)) {
+    return res
+      .status(404)
+      .render("pages/404", { message: "Invalid Folder ID" });
+  }
   const { size } = req.file;
   if (size > 2 * 1e6) {
     res.status(413).render("pages/add-file", {
@@ -134,7 +154,12 @@ export const validateNestedFile = (req, res, next) => {
 export const postNestedNewFile = async (req, res, next) => {
   try {
     const { folderId } = req.params;
-    const { id } = req.user;
+    if (isNaN(folderId)) {
+      return res
+        .status(404)
+        .render("pages/404", { message: "Invalid Folder ID" });
+    }
+    const userId = Number(req.user.id);
     const { originalname, size, mimetype, buffer } = req.file;
 
     // upload to supabase
@@ -157,7 +182,7 @@ export const postNestedNewFile = async (req, res, next) => {
     // }
 
     await insertNestedFile(
-      Number(id),
+      userId,
       originalname,
       size,
       mimetype,
