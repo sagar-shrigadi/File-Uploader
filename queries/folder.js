@@ -51,3 +51,9 @@ export const deleteFolderById = async (folder_id) => {
     where: { id: folder_id },
   });
 };
+export const getAllNestedFilesInFolderById = async (folder_id) => {
+  return prisma.file.findMany({
+    where: { parentId: folder_id },
+    orderBy: { id: "asc" },
+  });
+};

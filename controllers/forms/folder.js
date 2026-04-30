@@ -2,12 +2,14 @@ import { body, matchedData, validationResult } from "express-validator";
 import { emptyErr } from "./signUp.js";
 import {
   deleteFolderById,
+  getAllNestedFilesInFolderById,
   getFolderById,
   insertFolder,
   insertNestedFolder,
   updateFolderById,
 } from "../../queries/folder.js";
 import e from "express";
+import { supabaseStorage } from "../../lib/supabse.js";
 
 export const getNewFolder = (req, res) => {
   res.render("pages/add-folder", { path: "folders/new" });
@@ -72,6 +74,14 @@ export const postEditFolder = [
 export const postDeleteFolder = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const allFiles = await getAllNestedFilesInFolderById(Number(id));
+    // console.log("all nested files", allFiles);
+    allFiles.forEach(async (file) => {
+      const { data, error } = await supabaseStorage
+        .from("images")
+        .remove([`${file.url}`]);
+      if (error) throw error;
+    });
     await deleteFolderById(Number(id));
     res.status(204).redirect("/folders");
     return;
