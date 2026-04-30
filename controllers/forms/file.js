@@ -57,7 +57,7 @@ export const postNewFile = async (req, res, next) => {
       mimetype,
       data.path,
     );
-    res.status(201).redirect(`/files/${newFile.id}`);
+    res.status(201).redirect(`/folders`);
     return;
   } catch (error) {
     next(error);
@@ -92,7 +92,7 @@ export const postEditFile = [
     try {
       const { new_file_name } = matchedData(req);
       await updateFileById(Number(fileId), new_file_name);
-      return res.status(204).redirect(`/files/${fileId}`);
+      return res.status(204).redirect(`/folders`);
     } catch (error) {
       next(error);
     }
