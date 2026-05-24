@@ -58,3 +58,9 @@ export const getAllNestedFilesInFolderById = async (folder_id) => {
     orderBy: { id: "asc" },
   });
 };
+export const getAllNestedFoldersInFolderById = async (folder_id) => {
+  return prisma.folder.findUnique({
+    where: { id: folder_id },
+    include: { child: true },
+  });
+};

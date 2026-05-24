@@ -3,6 +3,7 @@ import { emptyErr } from "./signUp.js";
 import {
   deleteFolderById,
   getAllNestedFilesInFolderById,
+  getAllNestedFoldersInFolderById,
   getFolderById,
   insertFolder,
   insertNestedFolder,
@@ -89,15 +90,30 @@ export const postDeleteFolder = async (req, res, next) => {
         .status(404)
         .render("pages/404", { message: "Invalid Folder ID" });
     }
-    const allFiles = await getAllNestedFilesInFolderById(folderId);
-    // console.log("all nested files", allFiles);
-    allFiles.forEach(async (file) => {
-      const { data, error } = await supabaseStorage
-        .from("images")
-        .remove([`${file.url}`]);
-      if (error) throw error;
-    });
-    await deleteFolderById(folderId);
+
+    await rcrmFilesFromFolders(Number(folderId));
+    async function rcrmFilesFromFolders(folderId) {
+      const allFolders = await getAllNestedFoldersInFolderById(folderId);
+      console.log("all nested folders", allFolders.child);
+      // condm where a folder to be deleted contains nested folders in it
+      if (allFolders.child.length > 0) {
+        for (const f of allFolders.child) {
+          console.log("folder name", f.name);
+          await rcrmFilesFromFolders(Number(f.id));
+        }
+      }
+      // simply delete all files from folder
+      const allFiles = await getAllNestedFilesInFolderById(folderId);
+      console.log("all nested files", allFiles);
+      for (const file of allFiles) {
+        console.log("file to be deleted", file.name);
+        const { data, error } = await supabaseStorage
+          .from("images")
+          .remove([`${file.url}`]);
+        if (error) throw error;
+      }
+      await deleteFolderById(folderId);
+    }
     res.status(204).redirect("/folders");
     return;
   } catch (error) {

@@ -50,8 +50,8 @@ app.use((req, res, next) => {
   return;
 });
 app.use(async (req, res, next) => {
-  console.log(req.session);
-  await console.log(req.user);
+  // console.log(req.session);
+  // await console.log(req.user);
   next();
 });
 
