@@ -1,6 +1,6 @@
 :root {
   --text: black;
-  --bg: white;
+  --bg: oklch(92.5% 0.005 214.3);
   --btn-bg: oklch(from white 75% c h);
   --btn-bg-hover: oklch(from white 80% c h);
   --btn-bg-transition: background-color 150ms;
@@ -53,17 +53,21 @@ body {
     "Open Sans",
     "Helvetica Neue",
     sans-serif;
+  --section-width: min(1000px, 100% - 2rem);
+  --fs-1_15: clamp(1rem, 0.9478rem + 0.2609vw, 1.15rem);
+  --fs-1_35: clamp(1.15rem, 1.0804rem + 0.3478vw, 1.35rem);
 }
 .link_btn {
   text-decoration: none;
   text-decoration-skip-ink: auto;
   color: currentColor;
-  font-size: 1.15rem;
+  font-size: var(--fs-1_15);
   background-color: var(--btn-bg);
   border: none;
   transition: var(--btn-bg-transition);
-  padding: 0.75rem 1.75rem;
-  border-radius: 0.375rem;
+  padding: clamp(0.375rem, 0.2793rem + 0.4783vw, 0.65rem)
+    clamp(0.625rem, 0.2337rem + 1.9565vw, 1.75rem);
+  border-radius: 0.175rem;
 }
 .link_btn:hover {
   background-color: var(--btn-bg-hover);
@@ -91,16 +95,22 @@ svg {
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  padding-block: 3.5rem;
-  font-size: 1.25rem;
+  padding-block: clamp(1.5rem, 0.8043rem + 3.4783vw, 3.5rem);
+  font-size: clamp(1rem, 0.913rem + 0.4348vw, 1.25rem);
   background-color: var(--card-clr);
-  border-radius: 2.5rem;
+  border-radius: clamp(1rem, 0.4783rem + 2.6087vw, 2.5rem);
 }
-header {
+.nav_header {
+  --section-width: min(1000px, 100% - 1rem);
+  width: var(--section-width);
+  margin-inline: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 1rem 0;
+  h1 {
+    font-size: clamp(1.5rem, 1.3261rem + 0.8696vw, 2rem);
+  }
   h1:hover {
     color: var(--link-clr-hover);
   }
@@ -108,9 +118,12 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 2rem;
+    gap: clamp(0.75rem, 0.3152rem + 2.1739vw, 2rem);
     li {
-      font-size: 1.15rem;
+      font-size: var(--fs-1_15);
+    }
+    .logout {
+      padding-inline: clamp(0.875rem, 0.5707rem + 1.5217vw, 1.75rem);
     }
   }
   a {
@@ -126,7 +139,7 @@ main:not([class]) {
   min-height: 60dvh;
   width: min(600px, 100%);
   h2 {
-    font-size: 2.25rem;
+    font-size: clamp(1.5rem, 1.2391rem + 1.3043vw, 2.25rem);
     margin-bottom: 1.25rem;
   }
   .sign-up {
@@ -135,10 +148,11 @@ main:not([class]) {
     gap: 1.25rem;
     div {
       display: grid;
-      grid-template-columns: 200px 1fr;
+      grid-template-columns: clamp(6.25rem, 4.0761rem + 10.8696vw, 12.5rem) 1fr;
     }
     button {
       margin-top: 1.25rem;
+      padding: 0.75rem;
       cursor: pointer;
       border: none;
     }
@@ -184,7 +198,7 @@ main:not([class]) {
 .home,
 .selectFolder {
   min-height: 70dvh;
-  width: min(1000px, 100%);
+  width: var(--section-width);
   display: flex;
   flex-direction: column;
   ._folders,
@@ -196,7 +210,8 @@ main:not([class]) {
       align-items: center;
       justify-content: space-between;
       background-color: var(--btn-bg-hover);
-      padding-inline: 1rem;
+      padding-inline: clamp(0.25rem, -0.0109rem + 1.3043vw, 1rem);
+      border-radius: 0.25rem;
       .popoverBtn {
         cursor: pointer;
         background: none;
@@ -207,6 +222,9 @@ main:not([class]) {
   }
   ._folders {
     gap: 1.5rem;
+    article:first-child {
+      margin-top: 2rem;
+    }
   }
   ._files {
     article {
@@ -219,6 +237,9 @@ main:not([class]) {
     align-items: center;
     justify-content: center;
     gap: 1rem;
+    h3 {
+      text-align: start;
+    }
   }
   .actions {
     form {
@@ -238,20 +259,37 @@ main:not([class]) {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 1.35rem;
+    font-size: var(--fs-1_35);
     padding-bottom: 0.5rem;
-    margin-bottom: 3rem;
+    /* margin-bottom: 3rem; */
     border-bottom: 2px solid;
+    h2 {
+      align-self: flex-start;
+      font-size: clamp(1.375rem, 1.1489rem + 1.1304vw, 2.025rem);
+    }
     .links {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 1.5rem;
+      gap: clamp(1rem, 0.8261rem + 0.8696vw, 1.5rem);
       a {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 1rem;
+        font-size: clamp(0.875rem, 0.4924rem + 1.913vw, 1.15rem);
+        gap: clamp(0.625rem, 0.4946rem + 0.6522vw, 1rem);
+
+        svg {
+          width: clamp(1.25rem, 0.5543rem + 3.4783vw, 1.75rem);
+        }
+      }
+    }
+    @media (width <= 620px) {
+      h2 {
+        max-width: 15ch;
+      }
+      .links {
+        flex-direction: column;
       }
     }
   }
@@ -261,9 +299,9 @@ main:not([class]) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    font-size: 1.35rem;
+    font-size: var(--fs-1_35);
     padding-bottom: 0.5rem;
-    margin-bottom: 3rem;
+    /* margin-bottom: 2rem; */
     border-bottom: 2px solid;
     gap: 2rem;
     .pageLinks {
@@ -286,7 +324,12 @@ main:not([class]) {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 1.5rem;
+        gap: clamp(0.875rem, 0.0054rem + 4.3478vw, 1.5rem);
+      }
+      ._left {
+        svg {
+          width: 1.75rem;
+        }
       }
       .links {
         a {
@@ -294,7 +337,16 @@ main:not([class]) {
           align-items: center;
           justify-content: center;
           gap: 1rem;
+          padding-inline: clamp(1rem, 0.8333rem + 0.8333vw, 1.25rem);
+          svg {
+            width: clamp(1.125rem, 0.2554rem + 4.3478vw, 1.75rem);
+          }
         }
+      }
+      @media (width <= 450px) {
+        flex-direction: column;
+        gap: 1.25rem;
+        align-items: start;
       }
     }
   }
@@ -318,23 +370,24 @@ main:not([class]) {
   }
   border: 1px solid var(--btn-bg);
   padding-block: 2rem;
-  padding-inline-start: 1.25rem;
-  font-size: 1.15rem;
+  padding-inline: 1.25rem;
+  font-size: var(--fs-1_15);
   .asideheader {
+    --2rem: clamp(1.625rem, 1.4946rem + 0.6522vw, 2rem);
     > div:not([class]) {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding-inline-end: 1rem;
       h3 {
-        font-size: 32px;
+        font-size: var(--2rem);
       }
       button {
         background: none;
         border: none;
         cursor: pointer;
         svg {
-          width: 32px;
+          width: var(--2rem);
         }
       }
     }
@@ -372,10 +425,20 @@ main:not([class]) {
       background-color: var(--action-btn-hover);
     }
   }
+  @media (width <= 450px) {
+    min-width: 320px;
+  }
 }
 @keyframes slide {
   to {
     translate: -450px;
+  }
+}
+@media (width <= 450px) {
+  @keyframes slide {
+    to {
+      translate: -320px;
+    }
   }
 }
 footer {
@@ -392,6 +455,7 @@ footer {
 .errorPage {
   > section {
     min-height: 100dvh;
+    padding-inline: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -400,17 +464,17 @@ footer {
     color: black;
 
     h1 {
-      font-size: 192px;
+      font-size: clamp(5rem, 2.5652rem + 12.1739vw, 12rem);
       font-family: inherit;
       color: inherit;
       font-weight: 700;
     }
     h2 {
-      font-size: 3rem;
+      font-size: clamp(2.25rem, 1.9891rem + 1.3043vw, 3rem);
       margin-block: 0.5rem;
     }
     p {
-      font-size: 2rem;
+      font-size: clamp(1.5rem, 1.3261rem + 0.8696vw, 2rem);
       max-width: 35ch;
       text-align: center;
       margin-block: 0.5rem 1rem;

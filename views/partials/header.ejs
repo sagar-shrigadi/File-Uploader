@@ -10,14 +10,14 @@
     <link rel="stylesheet" href="/styles/style.css">
 </head>
 <body>
-    <header>
+    <header class="nav_header">
         <a href="/">
             <h1>File Uploader</h1>
         </a>
         <nav>
             <ul>
                 <% if (locals.currentUser) { %>
-                    <li><a href="/logout" class="link_btn">Logout</a></li>
+                    <li><a href="/logout" class="link_btn logout">Logout</a></li>
                 <% } else { %>
                     <li><a href="/login" class="link_btn">Login</a></li>
                     <li><a href="/sign-up" class="link_btn">Sign Up</a></li>
